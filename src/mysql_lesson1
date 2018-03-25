@@ -1,0 +1,79 @@
+CREATE DATABASE if NOT EXISTS users
+  DEFAULT CHARACTER SET utf8
+  DEFAULT COLLATE utf8_general_ci;
+USE users;
+CREATE TABLE IF NOT EXISTS person
+(
+  id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+  name VARCHAR(255) DEFAULT 'vasya',
+  surname VARCHAR(255),
+  weight DOUBLE,
+  bday DATETIME DEFAULT  '1987-12-30 9:15',
+  isMarried BOOLEAN DEFAULT 0
+);
+
+  ALTER TABLE person
+      add COLUMN
+  stamp TIMESTAMP;
+
+INSERT INTO person
+(name, surname, weight, bday, isMarried)
+VALUES
+  ('Vasya', 'Pupkin', 80.2, '1988-12-12 10:32', TRUE),
+  ('Petya', 'Juk', 70.2, '1989-12-12 8:32', FALSE ),
+  ('Saha', 'Puk', 60.2, '2000-12-12 13:32', 1),
+  ('Mataha', 'Tuk', 50.2, '2001-12-12 12:32', FALSE ),
+  ('Maha', 'Tuk', 50.2, '2010-12-12 11:32', FALSE ),
+  ('Daha', 'Tkk', 67.2, '2005-12-12 10:32', 0 );
+
+CREATE TABLE IF NOT EXISTS car
+(
+  id INT AUTO_INCREMENT NOT NULL,
+  PRIMARY KEY (id),
+  model VARCHAR(255)
+);
+INSERT INTO car (model) VALUES
+  ('volovo'),
+  ('bmv'),
+  ('subaru'),
+  ('mers'),
+  ('yaguar'),
+  ('bentli');
+
+CREATE TABLE IF NOT EXISTS ref_person_car
+(
+  id_person INT,
+  id_car INT,
+  FOREIGN KEY (id_person)
+    REFERENCES person(id)
+
+);
+ALTER TABLE ref_person_car
+    add CONSTRAINT xxx
+FOREIGN KEY (id_car)
+  REFERENCES car(id);
+
+INSERT INTO ref_person_car (id_person, id_car)
+VALUES
+  (1,1),
+  (1,2),
+  (1,5),
+  (2,3),
+  (3,3),
+  (4,5),
+  (5,6),
+  (6,1),
+  (3,4);
+SELECT id, name, surname
+FROM person
+# WHERE id = 1 OR name = 'Petya';
+# WHERE id=1 OR surname LIKE 't%';
+# WHERE id BETWEEN 1 AND  3;
+ #WHERE id IN (1,2,5,900);
+
+SELECT name, model
+FROM person
+JOIN ref_person_car rpc ON person.id = rpc.id_person
+JOIN car ON car.id = rpc.id_car
+;
+
